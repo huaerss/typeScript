@@ -8,7 +8,58 @@
 </head>
 
 <body>
+    <div class="list">
+        <button onclick="s(1)">1</button>
+    </div>
+    <div class="list">
+        <button onclick="s(2)">2</button>
+
+    </div>
+    <div class="list">
+        <button onclick="s(3)">3</button>
+
+    </div>
 
 </body>
+<script>
+
+
+    const channel = new BroadcastChannel('name');
+    channel.postMessage('hello');
+    const list = new Set();
+    channel.onmessage = (event) => {
+        switch (event.data) {
+            case 'hi':
+                list.add(event.origin);
+                console.log(list, event)
+                break;
+            case 'unload':
+                list.delete(event.origin);
+                console.log(list, event)
+                break;
+        }
+
+    }
+    const s = (name) => {
+        if (list.size === 0) {
+            window.open(`otherPage.html?name=${name}`);
+        }
+        postData({
+            name
+        });
+    }
+
+
+    const postData = (message) => {
+        channel.postMessage(message)
+    }
+
+
+
+</script>
+
+<style>
+
+</style>
 
 </html>

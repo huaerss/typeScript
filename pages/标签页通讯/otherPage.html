@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    //   监听
+    const channel = new BroadcastChannel('name');
+    const query = new URLSearchParams(location.search);
+    if (query.get('name')) {
+        document.body.innerHTML = query.get('name')
+    }
+    channel.onmessage = (event) => {
+        if (event.data == 'hello') {
+            channel.postMessage('hi')
+        }
+
+        if (event.data.name) {
+            document.body.innerHTML = event.data.name
+        }
+    }
+    channel.postMessage('hi')
+    window.addEventListener('beforeunload', () => {
+        channel.postMessage('unload')
+    })
+</script>
+
+</html>
